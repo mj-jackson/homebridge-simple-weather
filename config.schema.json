@@ -1,15 +1,41 @@
 {
-  "pluginAlias": "ExampleHomebridgePlugin",
+  "pluginAlias": "HomebridgeSimpleWeather",
   "pluginType": "platform",
   "singular": true,
   "schema": {
     "type": "object",
     "properties": {
-      "name": {
-        "title": "Name",
+      "apiKey": {
+        "title": "API Key",
         "type": "string",
-        "required": true,
-        "default": "Example Dynamic Platform"
+        "required": true
+      },
+      "location": {
+        "title": "Location",
+        "type": "string",
+        "required": true
+      },
+      "interval": {
+        "title": "Interval (in minutes)",
+        "type": "number",
+        "default": "60",
+        "required": true
+      },
+      "currentTemp": {
+        "title": "Show 'current temperature' sensor",
+        "type": "boolean"
+      },
+      "minTemp": {
+        "title": "Show 'minimum temperature' sensor",
+        "type": "boolean"
+      },
+      "maxTemp": {
+        "title": "Show 'maximum temperature' sensor",
+        "type": "boolean"
+      },
+      "rain": {
+        "title": "Show 'rain' sensor",
+        "type": "boolean"
       }
     }
   }
