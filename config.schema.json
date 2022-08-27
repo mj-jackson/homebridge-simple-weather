@@ -33,8 +33,8 @@
         "title": "Show 'maximum temperature' sensor",
         "type": "boolean"
       },
-      "rain": {
-        "title": "Show 'rain' sensor",
+      "humidity": {
+        "title": "Show 'humidity' sensor",
         "type": "boolean"
       }
     }

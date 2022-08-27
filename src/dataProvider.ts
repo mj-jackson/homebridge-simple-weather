@@ -5,7 +5,7 @@ import { Logger } from 'homebridge';
 
 export class DataProvider {
 
-  public data?: any;
+  public data?;
   private readonly interval: number;
   private readonly apiUrl: URL = new URL('https://api.openweathermap.org/data/2.5/weather');
 

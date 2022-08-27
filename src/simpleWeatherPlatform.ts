@@ -1,4 +1,4 @@
-import { API, Characteristic, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig, Service } from 'homebridge';
+import { API, Characteristic, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig, Service, UnknownContext } from 'homebridge';
 import { Device } from './devices/device';
 import { supportedDevices } from './devices/supportedDevices';
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
@@ -33,32 +33,29 @@ export class SimpleWeatherPlatform implements DynamicPlatformPlugin {
   }
 
   discoverDevices(): void {
-    // discovery
-    const selected: string[] = [];
-    this.supportedSensors.forEach((name: string) => {
-      if (this.config[name]) {
-        selected.push(name);
-      }
-    });
-    const devices: Device[] = supportedDevices.filter((device: Device) => selected.includes(device.id));
-
-    for (const device of devices) {
-      this.log.debug('Init device:', device);
+    for (const device of supportedDevices) {
       const uuid: string = this.api.hap.uuid.generate(device.id);
       const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
 
-      if (existingAccessory) {
-        // reload
-        new Accessory(device, this, existingAccessory, this.dataProvider);
-        //this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [existingAccessory]);
+      if (this.config[device.id]) {
+        let accessory: PlatformAccessory<UnknownContext>;
+
+        if (existingAccessory) {
+          accessory = existingAccessory;
+          this.log.info('Existing Device loaded from cache:', device.name);
+        } else {
+          accessory = new this.api.platformAccessory(device.name, uuid);
+          accessory.context.device = device;
+          this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+          this.log.info('New Device added:', device.name);
+        }
+
+        new Accessory(this, accessory, this.dataProvider);
       } else {
-        const accessory = new this.api.platformAccessory(device.name, uuid);
-        accessory.context.device = device;
-        this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
-
-        new Accessory(device, this, accessory, this.dataProvider);
-
-        this.log.info('Device added:', device.name);
+        if (existingAccessory) {
+          this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [existingAccessory]);
+          this.log.info('Existing Device unloaded:', device.name);
+        }
       }
     }
   }
