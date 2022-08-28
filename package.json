@@ -1,9 +1,13 @@
 {
-  "private": true,
   "displayName": "Homebridge Simple Weather",
   "name": "homebridge-simple-weather",
-  "version": "1.0.1",
-  "description": "A short description about what your plugin does.",
+  "version": "1.0.0",
+  "description": "Simple homebridge plugin exposing sensors for today's temperature and humidity.",
+  "author": {
+    "name" : "Michael Landes",
+    "email" : "michael@frozengecko.de",
+    "url" : "http://www.frozengecko.de/"
+  },
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
