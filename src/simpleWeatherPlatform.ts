@@ -19,9 +19,11 @@ export class SimpleWeatherPlatform implements DynamicPlatformPlugin {
     public readonly config: PlatformConfig,
     public readonly api: API,
   ) {
+    // init data provider
     this.dataProvider = new DataProvider(config.interval, config.apiKey, config.location, log);
+
     this.api.on('didFinishLaunching', () => {
-      log.debug('Executed didFinishLaunching callback');
+      this.log.debug('Executed didFinishLaunching callback');
       // run the method to discover / register your devices as accessories
       this.discoverDevices();
     });
@@ -33,10 +35,14 @@ export class SimpleWeatherPlatform implements DynamicPlatformPlugin {
   }
 
   discoverDevices(): void {
+    // all devices activated by the user will be added (or loaded from cache)
+    // devices not activated will be removed
+
     for (const device of supportedDevices) {
       const uuid: string = this.api.hap.uuid.generate(device.id);
       const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
 
+      // device.id has to match the config key
       if (this.config[device.id]) {
         let accessory: PlatformAccessory<UnknownContext>;
 
@@ -54,7 +60,7 @@ export class SimpleWeatherPlatform implements DynamicPlatformPlugin {
       } else {
         if (existingAccessory) {
           this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [existingAccessory]);
-          this.log.info('Existing Device unloaded:', device.name);
+          this.log.info('Existing Device removed:', device.name);
         }
       }
     }

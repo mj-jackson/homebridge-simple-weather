@@ -16,7 +16,7 @@ export class Accessory {
     this.accessory.getService(this.platform.Service.AccessoryInformation)!
       .setCharacteristic(this.platform.Characteristic.Manufacturer, 'SimpleWeather')
       .setCharacteristic(this.platform.Characteristic.Model, `${this.device.name} - OpenWeatherMap`)
-      .setCharacteristic(this.platform.Characteristic.SerialNumber, 'Default-Serial');
+      .setCharacteristic(this.platform.Characteristic.SerialNumber, `SimpleWeather-${this.device.id}`);
 
     this.service = this.accessory.getService(this.getSpecificService())
         || this.accessory.addService(this.getSpecificService());

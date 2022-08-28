@@ -10,6 +10,8 @@ export class DataProvider {
   private readonly apiUrl: URL = new URL('https://api.openweathermap.org/data/2.5/weather');
 
   constructor(interval:number, apiKey: string, location: string, private readonly log: Logger) {
+    this.log.debug('Init Dataprovider with arguments:', interval, apiKey, location);
+
     this.interval = (interval ?? 60) * 1000 * 60;
     this.apiUrl.searchParams.append('q', location);
     this.apiUrl.searchParams.append('appid', apiKey);
