@@ -15,7 +15,7 @@ Go to https://openweathermap.org
 
 ## 2. Homebridge
 * [(Install Homebridge)](https://github.com/homebridge/homebridge/wiki)
-* Install this plugin to your homebridge: `npm install TBD` (may require use of `sudo`)
+* Install this plugin to your homebridge: `npm install homebridge-simple-weather` (may require use of `sudo`)
 * Open the plugin settings
     * Add your API key
     * Add your city name (you took a note of it in 1.)
