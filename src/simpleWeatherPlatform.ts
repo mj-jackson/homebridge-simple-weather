@@ -3,7 +3,9 @@ import { Device } from './devices/device';
 import { supportedDevices } from './devices/supportedDevices';
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
 import { Accessory } from './accessory';
-import { DataProvider } from './dataProvider';
+import { OpenWeatherMapDataProvider } from './data/openWeatherMapDataProvider';
+import { SimpleWeatherConfig } from './data/config';
+import DataProvider from './data/dataProvider';
 
 export class SimpleWeatherPlatform implements DynamicPlatformPlugin {
   public readonly Service: typeof Service = this.api.hap.Service;
@@ -20,7 +22,9 @@ export class SimpleWeatherPlatform implements DynamicPlatformPlugin {
     public readonly api: API,
   ) {
     // init data provider
-    this.dataProvider = new DataProvider(config.interval, config.apiKey, config.location, log);
+    const simpleWeatherConfig: SimpleWeatherConfig = this.getSimpleWeatherConfig(config);
+    this.dataProvider = new OpenWeatherMapDataProvider(simpleWeatherConfig, log);
+    this.dataProvider.init();
 
     this.api.on('didFinishLaunching', () => {
       this.log.debug('Executed didFinishLaunching callback');
@@ -64,6 +68,14 @@ export class SimpleWeatherPlatform implements DynamicPlatformPlugin {
         }
       }
     }
+  }
+
+  private getSimpleWeatherConfig(platformConfig: PlatformConfig): SimpleWeatherConfig {
+    return {
+      interval: platformConfig.interval,
+      apiKey: platformConfig.apiKey,
+      location: platformConfig.location,
+    };
   }
 
 }

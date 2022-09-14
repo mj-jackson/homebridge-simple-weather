@@ -1,5 +1,5 @@
 import { PlatformAccessory, Service } from 'homebridge';
-import { DataProvider } from './dataProvider';
+import DataProvider from './data/dataProvider';
 import { Device, DeviceType } from './devices/device';
 import { SimpleWeatherPlatform } from './simpleWeatherPlatform';
 
@@ -44,6 +44,6 @@ export class Accessory {
   }
 
   private getData(): string {
-    return this.device.path.split('.').reduce((prev, current)=>prev && prev[current] || null, this.dataProvider.data);
+    return this.device.path.split('.').reduce((prev, current)=>prev && prev[current] || null, this.dataProvider.data as any);
   }
 }
