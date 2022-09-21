@@ -1,10 +1,12 @@
-import { SimpleWeatherData } from './simpleWeatherData';
+import { SimpleWeatherData, Weather } from './simpleWeatherData';
 import { Logger } from 'homebridge';
 import { SimpleWeatherConfig } from './config';
 
 export default abstract class DataProvider {
 
-  data?: SimpleWeatherData;
+  todayData?: Weather;
+  forecastData?: Weather[];
+  ready = false;
   protected readonly interval: number;
 
   constructor(protected config: SimpleWeatherConfig, protected readonly log: Logger) {
@@ -13,11 +15,22 @@ export default abstract class DataProvider {
     this.log.debug('Init Dataprovider with arguments:', interval, apiKey, location);
   }
 
-  abstract updateData(): void;
+  abstract updateData(): void | Promise<void>;
 
-  init(): void {
-    this.updateData();
+  async init(): Promise<void> {
+    await this.updateData();
     this.initInterval();
+  }
+
+  getData(): SimpleWeatherData | null {
+    if (!this.todayData || !this.forecastData) {
+      return null;
+    }
+
+    return {
+      today: this.todayData,
+      forecasts: this.forecastData,
+    };
   }
 
   private initInterval(): void {

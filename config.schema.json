@@ -63,6 +63,7 @@
       "forecastCurrentTemp": {
         "title": "Show 'current temperature' forecast sensor",
         "type": "boolean",
+        "default": false,
         "condition": {
           "functionBody": "return model.forecastNum > 0;"
         }
@@ -70,6 +71,7 @@
       "forecastMinTemp": {
         "title": "Show 'minimum temperature' forecast sensor",
         "type": "boolean",
+        "default": false,
         "condition": {
           "functionBody": "return model.forecastNum > 0;"
         }
@@ -77,6 +79,7 @@
       "forecastMaxTemp": {
         "title": "Show 'maximum temperature' forecast sensor",
         "type": "boolean",
+        "default": false,
         "condition": {
           "functionBody": "return model.forecastNum > 0;"
         }
@@ -84,6 +87,15 @@
       "forecastHumidity": {
         "title": "Show 'humidity' forecast sensor",
         "type": "boolean",
+        "default": false,
+        "condition": {
+          "functionBody": "return model.forecastNum > 0;"
+        }
+      },
+      "forecastRainProb": {
+        "title": "Show 'rain probability' forecast sensor",
+        "type": "boolean",
+        "default": false,
         "condition": {
           "functionBody": "return model.forecastNum > 0;"
         }

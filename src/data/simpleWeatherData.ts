@@ -1,6 +1,6 @@
 export type SimpleWeatherData = {
     today: Weather;
-    forecast: Weather[];
+    forecasts: Weather[];
 };
 
 export type Weather = {

@@ -1,3 +1,6 @@
+import DataProvider from '../data/dataProvider';
+import lang from '../data/language';
+
 export class Device {
   id: string;
   name: string;
@@ -9,6 +12,74 @@ export class Device {
     this.name = name;
     this.path = path;
     this.type = type;
+  }
+}
+
+export abstract class DataDevice<T> {
+  id: string;
+
+  constructor(id: string, protected dataProvider: DataProvider) {
+    this.id = id;
+  }
+
+  abstract getData(): T;
+
+  get name(): string {
+    return lang[this.id];
+  }
+
+  get type(): DeviceType {
+    switch (this.id) {
+      case 'currentTemp':
+        return DeviceType.Temperature;
+      case 'minTemp':
+        return DeviceType.Temperature;
+      case 'maxTemp':
+        return DeviceType.Temperature;
+      case 'humidity':
+        return DeviceType.Humidity;
+      case 'rainProb':
+        return DeviceType.Humidity;
+      default:
+        return DeviceType.Temperature;
+    }
+  }
+}
+
+export class TodayDevice extends DataDevice<number> {
+  constructor(id: string, protected dataProvider: DataProvider) {
+    super(id, dataProvider);
+  }
+
+  getData(): number {
+    if (!this.dataProvider?.todayData || !(this.id in this.dataProvider.todayData)) {
+      return 0;
+    }
+
+    return this.dataProvider.todayData[this.id];
+  }
+}
+
+export class ForecastDevice extends DataDevice<number> {
+  private forecastIndex: number;
+
+  constructor(id: string, index: number, protected dataProvider: DataProvider) {
+    super(id, dataProvider);
+    this.forecastIndex = index;
+  }
+
+  getData(): number {
+    if (!this.dataProvider.forecastData
+      || !this.dataProvider.forecastData[this.forecastIndex]
+      || !(this.id in this.dataProvider.forecastData[this.forecastIndex])) {
+      return 0;
+    }
+
+    return this.dataProvider.forecastData[this.forecastIndex][this.id];
+  }
+
+  get name(): string {
+    return `${lang[this.id]} ${lang['forecast']} #${this.forecastIndex + 1}`;
   }
 }
 
