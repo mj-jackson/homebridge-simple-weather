@@ -5,6 +5,16 @@
   "schema": {
     "type": "object",
     "properties": {
+      "language": {
+        "title": "Language",
+        "type": "string",
+        "default": "en",
+        "oneOf": [
+          { "title": "English", "enum": ["en"] },
+          { "title": "Deutsch", "enum": ["de"] }
+        ],
+        "required": true
+      },
       "apiKey": {
         "title": "API Key",
         "type": "string",
@@ -17,8 +27,9 @@
       },
       "interval": {
         "title": "Interval (in minutes)",
-        "type": "number",
-        "default": "60",
+        "type": "integer",
+        "default": 60,
+        "minimum": 0,
         "required": true
       },
       "currentTemp": {
@@ -36,6 +47,68 @@
       "humidity": {
         "title": "Show 'humidity' sensor",
         "type": "boolean"
+      },
+      "forecastNum": {
+        "title": "How many forecasts to show",
+        "type": "integer",
+        "default": 0,
+        "minimum": 0,
+        "maximum": 5
+      },
+      "forecastInterval": {
+        "title": "The interval (in hours) for forecasting",
+        "type": "integer",
+        "default": 6,
+        "oneOf": [
+          { "title": "6 hour", "enum": [6] },
+          { "title": "12 hour", "enum": [12] },
+          { "title": "18 hour", "enum": [18] },
+          { "title": "24 hour", "enum": [24] }
+        ],
+        "required": true,
+        "condition": {
+          "functionBody": "return model.forecastNum > 0;"
+        }
+      },
+      "forecastCurrentTemp": {
+        "title": "Show 'current temperature' forecast sensor",
+        "type": "boolean",
+        "default": false,
+        "condition": {
+          "functionBody": "return model.forecastNum > 0;"
+        }
+      },
+      "forecastMinTemp": {
+        "title": "Show 'minimum temperature' forecast sensor",
+        "type": "boolean",
+        "default": false,
+        "condition": {
+          "functionBody": "return model.forecastNum > 0;"
+        }
+      },
+      "forecastMaxTemp": {
+        "title": "Show 'maximum temperature' forecast sensor",
+        "type": "boolean",
+        "default": false,
+        "condition": {
+          "functionBody": "return model.forecastNum > 0;"
+        }
+      },
+      "forecastHumidity": {
+        "title": "Show 'humidity' forecast sensor",
+        "type": "boolean",
+        "default": false,
+        "condition": {
+          "functionBody": "return model.forecastNum > 0;"
+        }
+      },
+      "forecastRainProb": {
+        "title": "Show 'rain probability' forecast sensor",
+        "type": "boolean",
+        "default": false,
+        "condition": {
+          "functionBody": "return model.forecastNum > 0;"
+        }
       }
     }
   }

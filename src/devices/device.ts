@@ -1,14 +1,77 @@
-export class Device {
-  id: string;
-  name: string;
-  path: string;
-  type: DeviceType;
+import DataProvider from '../data/dataProvider';
+import lang from '../data/language';
 
-  constructor(id: string, name: string, path: string, type: DeviceType) {
+export abstract class DataDevice<T> {
+  id: string;
+
+  constructor(id: string, protected dataProvider: DataProvider, protected langKey: string) {
     this.id = id;
-    this.name = name;
-    this.path = path;
-    this.type = type;
+  }
+
+  abstract getData(): T;
+
+  get name(): string {
+    if (!this.langKey) {
+      return '';
+    }
+    return lang[this.langKey][this.id];
+  }
+
+  get type(): DeviceType {
+    switch (this.id) {
+      case 'currentTemp':
+        return DeviceType.Temperature;
+      case 'minTemp':
+        return DeviceType.Temperature;
+      case 'maxTemp':
+        return DeviceType.Temperature;
+      case 'humidity':
+        return DeviceType.Humidity;
+      case 'rainProb':
+        return DeviceType.Humidity;
+      default:
+        return DeviceType.Temperature;
+    }
+  }
+}
+
+export class TodayDevice extends DataDevice<number> {
+  constructor(id: string, protected dataProvider: DataProvider, protected langKey: string) {
+    super(id, dataProvider, langKey);
+  }
+
+  getData(): number {
+    if (!this.dataProvider?.todayData || !(this.id in this.dataProvider.todayData)) {
+      return 0;
+    }
+
+    return this.dataProvider.todayData[this.id];
+  }
+}
+
+export class ForecastDevice extends DataDevice<number> {
+  private forecastIndex: number;
+
+  constructor(id: string, index: number, protected dataProvider: DataProvider, protected langKey: string) {
+    super(id, dataProvider, langKey);
+    this.forecastIndex = index;
+  }
+
+  getData(): number {
+    if (!this.dataProvider.forecastData
+      || !this.dataProvider.forecastData[this.forecastIndex]
+      || !(this.id in this.dataProvider.forecastData[this.forecastIndex])) {
+      return 0;
+    }
+
+    return this.dataProvider.forecastData[this.forecastIndex][this.id];
+  }
+
+  get name(): string {
+    if (!this.langKey) {
+      return '';
+    }
+    return `${lang[this.langKey][this.id]} (${lang[this.langKey]['forecast']} #${this.forecastIndex + 1})`;
   }
 }
 
