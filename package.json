@@ -1,7 +1,7 @@
 {
   "displayName": "Homebridge Simple Weather",
   "name": "homebridge-simple-weather",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Simple homebridge plugin exposing sensors for today's temperature and humidity.",
   "author": {
     "name": "Michael Landes",
