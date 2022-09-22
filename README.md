@@ -23,15 +23,29 @@ Go to https://openweathermap.org
     * Choose which sensors should be created by checking them or uncheck to remove
 
 ## 3. Available data
+### Current data
 As of right now this plugin comes with a simple set of 4 sensors:
 * Current temperature
 * Minumum temperature
 * Maximum temperature
 * Humidity
 
+### Forecast data
+Version 2 extended the available data with forecasts. You can set how many forecast-datasets should be gathered and in which hourly interval.
+
+Eg. 3 sets in a 18 h interval will give you forecast data for 18, 36
+and 54 h in the future.
+
+Five sensors per forecast are available:
+* Temperature
+* Minimum temperature
+* Maximum temperature
+* Humidity
+* Chance of rain
+
 This may be expanded in the future.
 
 ## 4. Further information
-This plugin uses the `/data/2.5/weather` API endpoint which is free to use for [60 calls/minute / 1.000.000 calls/month](https://openweathermap.org/price) as of today.
+This plugin uses the `/data/2.5/weather` and `/data/2.5/forecast` API endpoints which are free to use for [60 calls/minute / 1.000.000 calls/month](https://openweathermap.org/price) as of today.
 
 The type of units is set to `metric`.
