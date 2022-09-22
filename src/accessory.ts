@@ -8,7 +8,7 @@ export class Accessory {
   constructor(
         private readonly platform: SimpleWeatherPlatform,
         private readonly accessory: PlatformAccessory,
-        private readonly device: DataDevice<any>,
+        private readonly device: DataDevice<number | string>,
   ) {
     this.accessory.getService(this.platform.Service.AccessoryInformation)!
       .setCharacteristic(this.platform.Characteristic.Manufacturer, 'SimpleWeather')

@@ -10,7 +10,3 @@ export type Weather = {
     humidity: number;
     rainProb?: number;
 };
-
-export type NamedWeather = Weather & {
-    name: string;
-};

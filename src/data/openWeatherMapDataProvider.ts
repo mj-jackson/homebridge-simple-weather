@@ -5,6 +5,20 @@ import { SimpleWeatherConfig } from './config';
 import { Weather } from './simpleWeatherData';
 import axios from 'axios';
 
+type OpenWeatherMapDayData = {
+  main: {
+    temp: number;
+    temp_min: number;
+    temp_max: number;
+    humidity: number;
+  };
+  pop?: number;
+};
+
+type OpenWeatherMapForecastData = {
+  list: OpenWeatherMapDayData[];
+};
+
 export class OpenWeatherMapDataProvider extends DataProvider {
 
   private readonly apiUrl: string = 'https://api.openweathermap.org/data/2.5';
@@ -32,8 +46,7 @@ export class OpenWeatherMapDataProvider extends DataProvider {
     this.log.debug('Calling OpenWeatherMap Forecast URL:', this.getUrl('forecast').toString());
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private mapToday(data: any): Weather {
+  private mapToday(data: OpenWeatherMapDayData): Weather {
     return {
       currentTemp: data.main.temp,
       minTemp: data.main.temp_min,
@@ -43,12 +56,12 @@ export class OpenWeatherMapDataProvider extends DataProvider {
     };
   }
 
-  private mapForecast(data: any): Weather[] {
-    const list: any[] = data.list;
+  private mapForecast(data: OpenWeatherMapForecastData): Weather[] {
+    const list: OpenWeatherMapDayData[] = data.list;
     const step: number = this.config.forecastInterval / 3;
     const filtered: Weather[] = [];
 
-    list.forEach((element: any, index: number) => {
+    list.forEach((element: OpenWeatherMapDayData, index: number) => {
       const numEle: number = filtered.length;
       if ((index + 1) % step === 0 && numEle < this.config.forecastNum) {
         this.log.debug('Forecast element added:', index + 1);

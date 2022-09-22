@@ -5,6 +5,16 @@
   "schema": {
     "type": "object",
     "properties": {
+      "language": {
+        "title": "Language",
+        "type": "string",
+        "default": "en",
+        "oneOf": [
+          { "title": "English", "enum": ["en"] },
+          { "title": "Deutsch", "enum": ["de"] }
+        ],
+        "required": true
+      },
       "apiKey": {
         "title": "API Key",
         "type": "string",

@@ -4,13 +4,14 @@ import { Accessory } from './accessory';
 import { OpenWeatherMapDataProvider } from './data/openWeatherMapDataProvider';
 import { SimpleWeatherConfig } from './data/config';
 import DataProvider from './data/dataProvider';
-import { ForecastDevice, TodayDevice } from './devices/device';
+import { DataDevice, ForecastDevice, TodayDevice } from './devices/device';
 
 export class SimpleWeatherPlatform implements DynamicPlatformPlugin {
   public readonly Service: typeof Service = this.api.hap.Service;
   public readonly Characteristic: typeof Characteristic = this.api.hap.Characteristic;
   public readonly accessories: PlatformAccessory[] = [];
   public dataProvider: DataProvider;
+  private simpleWeatherConfig: SimpleWeatherConfig;
 
   constructor(
     public readonly log: Logger,
@@ -18,46 +19,31 @@ export class SimpleWeatherPlatform implements DynamicPlatformPlugin {
     public readonly api: API,
   ) {
     // init data provider
-    const simpleWeatherConfig: SimpleWeatherConfig = this.getSimpleWeatherConfig();
-    this.dataProvider = new OpenWeatherMapDataProvider(simpleWeatherConfig, log);
+    this.simpleWeatherConfig = this.getSimpleWeatherConfig();
+    this.dataProvider = new OpenWeatherMapDataProvider(this.simpleWeatherConfig, log);
 
     this.api.on('didFinishLaunching', () => {
-      this.log.debug('Executed didFinishLaunching callback');
-      // run the method to discover / register your devices as accessories
-      // this.discoverDevices();
       this.dataProvider.init().then(() => {
         this.discoverTodayDevices();
         this.discoverForecastDevices();
       });
+
+      this.log.debug('Executed didFinishLaunching callback');
     });
   }
 
   configureAccessory(accessory: PlatformAccessory): void {
-    this.log.info('Loading accessory from cache');
     this.accessories.push(accessory);
   }
 
   discoverTodayDevices(): void {
-    const config: SimpleWeatherConfig = this.getSimpleWeatherConfig();
-    for (const [key, value] of Object.entries(config.todayDevices)) {
+    for (const [key, value] of Object.entries(this.simpleWeatherConfig.todayDevices)) {
       const uuid: string = this.api.hap.uuid.generate(key);
       const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
-      const device: TodayDevice = new TodayDevice(key, this.dataProvider);
+      const device: TodayDevice = new TodayDevice(key, this.dataProvider, this.simpleWeatherConfig.language);
 
       if (value) {
-        let accessory: PlatformAccessory<UnknownContext>;
-
-        if (existingAccessory) {
-          accessory = existingAccessory;
-          this.log.info('Existing Device loaded from cache:', device.id);
-        } else {
-          accessory = new this.api.platformAccessory(device.name, uuid);
-          accessory.context.device = device;
-          this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
-          this.log.info('New Device added:', device.name);
-        }
-
-        new Accessory(this, accessory, device);
+        this.registerOrDeregisterAccessory(device, uuid, existingAccessory);
       } else {
         if (existingAccessory) {
           this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [existingAccessory]);
@@ -68,29 +54,15 @@ export class SimpleWeatherPlatform implements DynamicPlatformPlugin {
   }
 
   discoverForecastDevices(): void {
-    const config: SimpleWeatherConfig = this.getSimpleWeatherConfig();
-
     // 0 - 4 because 5 is the maximum of forecasts right now
     for (let i = 0; i < 4; i++) {
-      for (const [key, value] of Object.entries(config.forecastDevices)) {
+      for (const [key, value] of Object.entries(this.simpleWeatherConfig.forecastDevices)) {
         const uuid: string = this.api.hap.uuid.generate(`forecast-${key}-${i}`);
         const existingAccessory = this.accessories.find(accessory => accessory.UUID === uuid);
-        const device: ForecastDevice = new ForecastDevice(key, i, this.dataProvider);
+        const device: ForecastDevice = new ForecastDevice(key, i, this.dataProvider, this.simpleWeatherConfig.language);
 
-        if (value && i < config.forecastNum) {
-          let accessory: PlatformAccessory<UnknownContext>;
-
-          if (existingAccessory) {
-            accessory = existingAccessory;
-            this.log.info('Existing FC Device loaded from cache:', device.id);
-          } else {
-            accessory = new this.api.platformAccessory(device.name, uuid);
-            accessory.context.device = device;
-            this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
-            this.log.info('New Device added:', device.name);
-          }
-
-          new Accessory(this, accessory, device);
+        if (value && i < this.simpleWeatherConfig.forecastNum) {
+          this.registerOrDeregisterAccessory(device, uuid, existingAccessory);
         } else {
           if (existingAccessory) {
             this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [existingAccessory]);
@@ -101,10 +73,27 @@ export class SimpleWeatherPlatform implements DynamicPlatformPlugin {
     }
   }
 
+  private registerOrDeregisterAccessory(device: DataDevice<number | string>, uuid: string, existingAccessory?: PlatformAccessory): void {
+    let accessory: PlatformAccessory<UnknownContext>;
+
+    if (existingAccessory) {
+      accessory = existingAccessory;
+      this.log.info('Device loaded from cache:', device.name);
+    } else {
+      accessory = new this.api.platformAccessory(device.name, uuid);
+      accessory.context.device = device;
+      this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
+      this.log.info('New Device added:', device.name);
+    }
+
+    new Accessory(this, accessory, device);
+  }
+
   private getSimpleWeatherConfig(): SimpleWeatherConfig {
-    const config: SimpleWeatherConfig = {
-      interval: this.config.interval,
+    return {
+      language: this.config.language,
       apiKey: this.config.apiKey,
+      interval: this.config.interval,
       location: this.config.location,
       todayDevices: {
         currentTemp: this.config.currentTemp,
@@ -123,8 +112,6 @@ export class SimpleWeatherPlatform implements DynamicPlatformPlugin {
         rainProb: this.config.forecastRainProb,
       },
     };
-
-    return config;
   }
 
 }

@@ -1,31 +1,20 @@
 import DataProvider from '../data/dataProvider';
 import lang from '../data/language';
 
-export class Device {
-  id: string;
-  name: string;
-  path: string;
-  type: DeviceType;
-
-  constructor(id: string, name: string, path: string, type: DeviceType) {
-    this.id = id;
-    this.name = name;
-    this.path = path;
-    this.type = type;
-  }
-}
-
 export abstract class DataDevice<T> {
   id: string;
 
-  constructor(id: string, protected dataProvider: DataProvider) {
+  constructor(id: string, protected dataProvider: DataProvider, protected langKey: string) {
     this.id = id;
   }
 
   abstract getData(): T;
 
   get name(): string {
-    return lang[this.id];
+    if (!this.langKey) {
+      return '';
+    }
+    return lang[this.langKey][this.id];
   }
 
   get type(): DeviceType {
@@ -47,8 +36,8 @@ export abstract class DataDevice<T> {
 }
 
 export class TodayDevice extends DataDevice<number> {
-  constructor(id: string, protected dataProvider: DataProvider) {
-    super(id, dataProvider);
+  constructor(id: string, protected dataProvider: DataProvider, protected langKey: string) {
+    super(id, dataProvider, langKey);
   }
 
   getData(): number {
@@ -63,8 +52,8 @@ export class TodayDevice extends DataDevice<number> {
 export class ForecastDevice extends DataDevice<number> {
   private forecastIndex: number;
 
-  constructor(id: string, index: number, protected dataProvider: DataProvider) {
-    super(id, dataProvider);
+  constructor(id: string, index: number, protected dataProvider: DataProvider, protected langKey: string) {
+    super(id, dataProvider, langKey);
     this.forecastIndex = index;
   }
 
@@ -79,7 +68,10 @@ export class ForecastDevice extends DataDevice<number> {
   }
 
   get name(): string {
-    return `${lang[this.id]} ${lang['forecast']} #${this.forecastIndex + 1}`;
+    if (!this.langKey) {
+      return '';
+    }
+    return `${lang[this.langKey][this.id]} (${lang[this.langKey]['forecast']} #${this.forecastIndex + 1})`;
   }
 }
 
