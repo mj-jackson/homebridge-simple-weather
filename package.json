@@ -1,7 +1,7 @@
 {
   "displayName": "Homebridge Simple Weather",
   "name": "homebridge-simple-weather",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Simple homebridge plugin exposing sensors for temperature and humidity.",
   "author": {
     "name": "Michael Landes",
@@ -28,7 +28,14 @@
     "prepublishOnly": "npm run lint && npm run build"
   },
   "keywords": [
-    "homebridge-plugin", "weather", "homekit", "openweathermap", "smart-home", "forecast", "temperature", "humidity"
+    "homebridge-plugin",
+    "weather",
+    "homekit",
+    "openweathermap",
+    "smart-home",
+    "forecast",
+    "temperature",
+    "humidity"
   ],
   "dependencies": {
     "axios": "^0.27.2"
