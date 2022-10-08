@@ -39,7 +39,7 @@
         "title": "Interval (in minutes)",
         "type": "integer",
         "default": 60,
-        "minimum": 0,
+        "minimum": 1,
         "required": true
       },
       "currentTemp": {

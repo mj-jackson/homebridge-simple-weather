@@ -1,9 +1,9 @@
 export type SimpleWeatherConfig = {
-    language: string;
+    language: 'en' | 'de';
     apiKey: string;
     interval: number;
-    city: string;
-    location: Location;
+    city?: string;
+    location?: Location;
     todayDevices: WeatherConfig;
     forecastNum: number;
     forecastInterval: number;

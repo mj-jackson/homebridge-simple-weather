@@ -97,7 +97,7 @@ export class OpenWeatherMapDataProvider extends DataProvider {
   private getUrl(path: string): URL {
     const url: URL = new URL(`${this.apiUrl}/${path}`);
 
-    if (this.config.location.lat && this.config.location.long) {
+    if (this.config.location?.lat && this.config.location?.long) {
       url.searchParams.append('lat', this.config.location.lat.toString());
       url.searchParams.append('lon', this.config.location.long.toString());
     } else if (this.config.city) {
