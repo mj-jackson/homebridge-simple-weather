@@ -2,7 +2,8 @@ export type SimpleWeatherConfig = {
     language: string;
     apiKey: string;
     interval: number;
-    location: string;
+    city: string;
+    location: Location;
     todayDevices: WeatherConfig;
     forecastNum: number;
     forecastInterval: number;
@@ -15,4 +16,9 @@ export type WeatherConfig = {
     maxTemp: boolean;
     humidity: boolean;
     rainProb: boolean;
+};
+
+type Location = {
+    lat?: number;
+    long?: number;
 };

@@ -43,6 +43,8 @@ export class OpenWeatherMapDataProvider extends DataProvider {
       this.log.error('Calling OpenWeatherMap failed:');
       if (err instanceof AxiosError) {
         this.log.error('Error:', err.code, err.response?.status, err.response?.statusText);
+      } else {
+        this.log.error('Error:', err);
       }
     }
 
@@ -59,6 +61,8 @@ export class OpenWeatherMapDataProvider extends DataProvider {
       this.log.error('Calling OpenWeatherMap forecast failed:');
       if (err instanceof AxiosError) {
         this.log.error('Error:', err.code, err.response?.status, err.response?.statusText);
+      } else {
+        this.log.error('Error:', err);
       }
     }
 
@@ -92,7 +96,16 @@ export class OpenWeatherMapDataProvider extends DataProvider {
 
   private getUrl(path: string): URL {
     const url: URL = new URL(`${this.apiUrl}/${path}`);
-    url.searchParams.append('q', this.config.location);
+
+    if (this.config.location.lat && this.config.location.long) {
+      url.searchParams.append('lat', this.config.location.lat.toString());
+      url.searchParams.append('lon', this.config.location.long.toString());
+    } else if (this.config.city) {
+      url.searchParams.append('q', this.config.city);
+    } else {
+      throw 'Location not configured correctly.';
+    }
+
     url.searchParams.append('appid', this.config.apiKey);
     url.searchParams.append('units', 'metric');
 

@@ -13,17 +13,27 @@
           { "title": "English", "enum": ["en"] },
           { "title": "Deutsch", "enum": ["de"] }
         ],
-        "required": true
+        "required": true,
+        "description": "This language determines how the created sensors are named."
       },
       "apiKey": {
         "title": "API Key",
         "type": "string",
-        "required": true
+        "required": true,
+        "description": "To get an API Key check out <a href=\"https://home.openweathermap.org/myservices\" target=\"_blank\">OpenWeatherMap</a>"
       },
       "location": {
-        "title": "Location",
+        "title": "City",
         "type": "string",
-        "required": true
+        "description": "Enter city name, state and country separated by comma. Use ISO 3166 for state and country codes."
+      },
+      "lat": {
+        "title": "Latitude",
+        "type": "number"
+      },
+      "long": {
+        "title": "Latitude",
+        "type": "number"
       },
       "interval": {
         "title": "Interval (in minutes)",
@@ -111,5 +121,42 @@
         }
       }
     }
-  }
+  },
+  "layout": [
+    "apiKey",
+    "language",
+    { 
+      "widget": "message", 
+      "message": "<h4>Location</h4>"
+    },
+    { 
+      "widget": "message", 
+      "message": "<small>You have to provide either 'City' or 'Latitude' and 'Longitude'.</small>"
+    },
+    { 
+      "widget": "message", 
+      "message": "<small><b>If both are provided 'Lat&Long' will have priority!</b></small>"
+    },
+    "location",
+    {
+      "type": "flex",
+      "flex-flow": "row wrap",
+      "items": [
+        "lat",
+        "long"
+      ]
+    },
+    "interval",
+    "currentTemp",
+    "minTemp",
+    "maxTemp",
+    "humidity",
+    "forecastNum",
+    "forecastInterval",
+    "forecastCurrentTemp",
+    "forecastMinTemp",
+    "forecastMaxTemp",
+    "forecastHumidity",
+    "forecastRainProb"
+  ]
 }

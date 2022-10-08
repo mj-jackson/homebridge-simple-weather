@@ -94,7 +94,11 @@ export class SimpleWeatherPlatform implements DynamicPlatformPlugin {
       language: this.config.language,
       apiKey: this.config.apiKey,
       interval: this.config.interval,
-      location: this.config.location,
+      city: this.config.location,
+      location: {
+        lat: this.config.lat,
+        long: this.config.long,
+      },
       todayDevices: {
         currentTemp: this.config.currentTemp,
         minTemp: this.config.minTemp,
