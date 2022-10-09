@@ -10,7 +10,7 @@ This plugin uses [OpenWeatherMap.org](https://openweathermap.org), an online and
 
 ## 1. Open Weather Map
 Go to https://openweathermap.org
-* Search for your city and note down the city name as displayed (e.g. `Munich, DE`)
+* Search for your city and note down the city name (e.g. `Munich, DE`) or the latitude and longitude as displayed
 * Register an account to get an API key
 
 ## 2. Homebridge
@@ -18,7 +18,8 @@ Go to https://openweathermap.org
 * Install this plugin to your homebridge: `npm install homebridge-simple-weather` (may require use of `sudo`)
 * Open the plugin settings
     * Add your API key
-    * Add your city name (you took a note of it in 1.)
+    * Add your city name or latitude and longitude (you took a note of it in 1.)
+        * Latitude and longitude will have priority if both is provided
     * Add the interval you want the data to update (default: 60) (in minutes)
     * Choose which sensors should be created by checking them or uncheck to remove
 
