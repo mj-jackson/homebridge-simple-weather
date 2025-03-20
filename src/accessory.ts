@@ -24,19 +24,19 @@ export class Accessory {
 
   private getSpecificService() {
     switch (this.device.type) {
-      case DeviceType.Humidity:
-        return this.platform.Service.HumiditySensor;
-      default:
-        return this.platform.Service.TemperatureSensor;
+    case DeviceType.Humidity:
+      return this.platform.Service.HumiditySensor;
+    default:
+      return this.platform.Service.TemperatureSensor;
     }
   }
 
   private getSpecificValue() {
     switch (this.device.type) {
-      case DeviceType.Humidity:
-        return this.platform.Characteristic.CurrentRelativeHumidity;
-      default:
-        return this.platform.Characteristic.CurrentTemperature;
+    case DeviceType.Humidity:
+      return this.platform.Characteristic.CurrentRelativeHumidity;
+    default:
+      return this.platform.Characteristic.CurrentTemperature;
     }
   }
 }

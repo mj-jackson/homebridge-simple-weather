@@ -10,7 +10,7 @@ export default abstract class DataProvider {
   protected readonly interval: number;
 
   constructor(protected config: SimpleWeatherConfig, protected readonly log: Logger) {
-    const {interval, apiKey} = config;
+    const { interval, apiKey } = config;
     this.interval = (interval ?? 60) * 1000 * 60;
     this.log.debug('Init Dataprovider with arguments:', interval, apiKey);
   }

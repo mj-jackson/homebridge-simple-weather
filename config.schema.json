@@ -10,8 +10,18 @@
         "type": "string",
         "default": "en",
         "oneOf": [
-          { "title": "English", "enum": ["en"] },
-          { "title": "Deutsch", "enum": ["de"] }
+          {
+            "title": "English",
+            "enum": [
+              "en"
+            ]
+          },
+          {
+            "title": "Deutsch",
+            "enum": [
+              "de"
+            ]
+          }
         ],
         "required": true,
         "description": "This language determines how the created sensors are named."
@@ -72,10 +82,30 @@
         "type": "integer",
         "default": 6,
         "oneOf": [
-          { "title": "6 hour", "enum": [6] },
-          { "title": "12 hour", "enum": [12] },
-          { "title": "18 hour", "enum": [18] },
-          { "title": "24 hour", "enum": [24] }
+          {
+            "title": "6 hour",
+            "enum": [
+              6
+            ]
+          },
+          {
+            "title": "12 hour",
+            "enum": [
+              12
+            ]
+          },
+          {
+            "title": "18 hour",
+            "enum": [
+              18
+            ]
+          },
+          {
+            "title": "24 hour",
+            "enum": [
+              24
+            ]
+          }
         ],
         "required": true,
         "condition": {
@@ -127,16 +157,16 @@
   "layout": [
     "apiKey",
     "language",
-    { 
-      "widget": "message", 
+    {
+      "widget": "message",
       "message": "<h4>Location</h4>"
     },
-    { 
-      "widget": "message", 
+    {
+      "widget": "message",
       "message": "<small>You have to provide either 'City' or 'Latitude' and 'Longitude'.</small>"
     },
-    { 
-      "widget": "message", 
+    {
+      "widget": "message",
       "message": "<small><b>If both are provided 'Lat&Long' will have priority!</b></small>"
     },
     "location",

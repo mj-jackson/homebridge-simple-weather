@@ -19,18 +19,18 @@ export abstract class DataDevice<T> {
 
   get type(): DeviceType {
     switch (this.id) {
-      case 'currentTemp':
-        return DeviceType.Temperature;
-      case 'minTemp':
-        return DeviceType.Temperature;
-      case 'maxTemp':
-        return DeviceType.Temperature;
-      case 'humidity':
-        return DeviceType.Humidity;
-      case 'rainProb':
-        return DeviceType.Humidity;
-      default:
-        return DeviceType.Temperature;
+    case 'currentTemp':
+      return DeviceType.Temperature;
+    case 'minTemp':
+      return DeviceType.Temperature;
+    case 'maxTemp':
+      return DeviceType.Temperature;
+    case 'humidity':
+      return DeviceType.Humidity;
+    case 'rainProb':
+      return DeviceType.Humidity;
+    default:
+      return DeviceType.Temperature;
     }
   }
 }
@@ -71,7 +71,7 @@ export class ForecastDevice extends DataDevice<number> {
     if (!this.langKey) {
       return '';
     }
-    return `${lang[this.langKey][this.id]} (${lang[this.langKey]['forecast']} #${this.forecastIndex + 1})`;
+    return `${lang[this.langKey][this.id]} (${lang[this.langKey].forecast} #${this.forecastIndex + 1})`;
   }
 }
 
