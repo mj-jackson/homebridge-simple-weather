@@ -7,8 +7,8 @@ import DataProvider from './data/dataProvider';
 import { DataDevice, ForecastDevice, TodayDevice } from './devices/device';
 
 export class SimpleWeatherPlatform implements DynamicPlatformPlugin {
-  public readonly Service: typeof Service = this.api.hap.Service;
-  public readonly Characteristic: typeof Characteristic = this.api.hap.Characteristic;
+  public readonly Service: typeof Service;
+  public readonly Characteristic: typeof Characteristic;
   public readonly accessories: PlatformAccessory[] = [];
   public dataProvider: DataProvider;
   private simpleWeatherConfig: SimpleWeatherConfig;
@@ -18,6 +18,8 @@ export class SimpleWeatherPlatform implements DynamicPlatformPlugin {
     public readonly config: PlatformConfig,
     public readonly api: API,
   ) {
+    this.Service = this.api.hap.Service;
+    this.Characteristic = this.api.hap.Characteristic;
     // init data provider
     this.simpleWeatherConfig = this.getSimpleWeatherConfig();
     this.dataProvider = new OpenWeatherMapDataProvider(this.simpleWeatherConfig, log);

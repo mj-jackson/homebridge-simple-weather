@@ -1,10 +1,11 @@
 import DataProvider from '../data/dataProvider';
+import { Weather } from '../data/simpleWeatherData';
 import lang from '../data/language';
 
 export abstract class DataDevice<T> {
   id: string;
 
-  constructor(id: string, protected dataProvider: DataProvider, protected langKey: string) {
+  constructor(id: string, protected dataProvider: DataProvider, protected langKey: 'en' | 'de') {
     this.id = id;
   }
 
@@ -19,24 +20,24 @@ export abstract class DataDevice<T> {
 
   get type(): DeviceType {
     switch (this.id) {
-    case 'currentTemp':
-      return DeviceType.Temperature;
-    case 'minTemp':
-      return DeviceType.Temperature;
-    case 'maxTemp':
-      return DeviceType.Temperature;
-    case 'humidity':
-      return DeviceType.Humidity;
-    case 'rainProb':
-      return DeviceType.Humidity;
-    default:
-      return DeviceType.Temperature;
+      case 'currentTemp':
+        return DeviceType.Temperature;
+      case 'minTemp':
+        return DeviceType.Temperature;
+      case 'maxTemp':
+        return DeviceType.Temperature;
+      case 'humidity':
+        return DeviceType.Humidity;
+      case 'rainProb':
+        return DeviceType.Humidity;
+      default:
+        return DeviceType.Temperature;
     }
   }
 }
 
 export class TodayDevice extends DataDevice<number> {
-  constructor(id: string, protected dataProvider: DataProvider, protected langKey: string) {
+  constructor(id: string, protected dataProvider: DataProvider, protected langKey: 'en' | 'de') {
     super(id, dataProvider, langKey);
   }
 
@@ -45,14 +46,14 @@ export class TodayDevice extends DataDevice<number> {
       return 0;
     }
 
-    return this.dataProvider.todayData[this.id];
+    return this.dataProvider.todayData[(this.id as keyof Weather)] as number;
   }
 }
 
 export class ForecastDevice extends DataDevice<number> {
   private forecastIndex: number;
 
-  constructor(id: string, index: number, protected dataProvider: DataProvider, protected langKey: string) {
+  constructor(id: string, index: number, protected dataProvider: DataProvider, protected langKey: 'en' | 'de') {
     super(id, dataProvider, langKey);
     this.forecastIndex = index;
   }
@@ -64,7 +65,7 @@ export class ForecastDevice extends DataDevice<number> {
       return 0;
     }
 
-    return this.dataProvider.forecastData[this.forecastIndex][this.id];
+    return this.dataProvider.forecastData[this.forecastIndex][(this.id as keyof Weather)] as number;
   }
 
   get name(): string {

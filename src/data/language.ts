@@ -1,4 +1,4 @@
-const lang = {
+const lang: ILang = {
   de: {
     currentTemp: 'Temperatur',
     minTemp: 'min. Temperatur',
@@ -16,5 +16,11 @@ const lang = {
     forecast: 'Forecast',
   },
 };
+
+export interface ILang {
+  [key: string]: {
+    [key: string]: string,
+  },
+}
 
 export default lang;
