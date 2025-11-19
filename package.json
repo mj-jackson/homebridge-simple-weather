@@ -2,7 +2,7 @@
   "displayName": "Homebridge Simple Weather",
   "name": "homebridge-simple-weather",
   "type": "module",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Simple homebridge plugin exposing sensors for temperature and humidity.",
   "author": {
     "name": "Michael Landes",
